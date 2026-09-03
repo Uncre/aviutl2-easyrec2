@@ -4,6 +4,13 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without the leading v"
+        required: true
+        default: "0.1.2"
+        type: string
 
 permissions:
   contents: write
@@ -18,11 +25,17 @@ jobs:
       - name: Validate tag and package
         shell: pwsh
         run: |
-          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $version = "${{ inputs.version }}" -replace '^v', ''
+          } else {
+            $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          }
           $cmakeVersion = Select-String -Path CMakeLists.txt -Pattern 'project\(EasyRec2 VERSION ([^ ]+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }
           if ($version -ne $cmakeVersion) {
             throw "Tag version $version does not match CMake project version $cmakeVersion"
           }
+          "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+          "RELEASE_TAG=v$version" >> $env:GITHUB_ENV
           ./package.ps1 -Version $version
 
       - name: Create GitHub Release
@@ -31,4 +44,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $assets = Get-ChildItem -LiteralPath dist -File | ForEach-Object { $_.FullName }
-          gh release create $env:GITHUB_REF_NAME $assets --verify-tag --generate-notes --title "簡易録音2 $env:GITHUB_REF_NAME"
+          gh release create $env:RELEASE_TAG $assets --verify-tag --generate-notes --title "簡易録音2 $env:RELEASE_TAG"
