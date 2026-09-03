@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.21)
+project(EasyRec2 VERSION 0.1.2 LANGUAGES CXX)
+
+add_library(EasyRec2 SHARED src/plugin.cpp)
+target_compile_features(EasyRec2 PRIVATE cxx_std_20)
+target_compile_definitions(EasyRec2 PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX)
+target_compile_options(EasyRec2 PRIVATE /utf-8 /W4 /permissive- /EHsc)
+target_include_directories(EasyRec2 PRIVATE third_party/aviutl2_sdk)
+target_link_libraries(EasyRec2 PRIVATE ole32 uuid propsys comctl32 shell32 user32 gdi32 winmm)
+set_target_properties(EasyRec2 PROPERTIES PREFIX "" SUFFIX ".aux2")

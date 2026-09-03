@@ -1,0 +1,14 @@
+/build/
+/dist/
+/.aviutl2-cli/
+/codec-test/
+/EasyRec2/
+*.obj
+*.lib
+*.exp
+*.pdb
+*.ilk
+*.part
+*.user
+*.suo
+.vs/

@@ -1,0 +1,52 @@
+# AviUtl2 CLI (https://github.com/sevenc-nanashi/aviutl2-cli) compatible project file.
+[project]
+id = "EasyRec2"
+name = "簡易録音2"
+version = "0.1.2"
+
+[development]
+aviutl2_version = "latest"
+
+[artifacts.easyrec2_aux2]
+destination = "Plugin/EasyRec2/EasyRec2.aux2"
+
+[artifacts.easyrec2_aux2.profiles.debug]
+build = "powershell -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 -Configuration Debug"
+source = "build/EasyRec2.aux2"
+
+[artifacts.easyrec2_aux2.profiles.release]
+build = "powershell -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 -Configuration Release"
+source = "build/EasyRec2.aux2"
+
+[artifacts.readme]
+source = "README.md"
+destination = "Plugin/EasyRec2/README.md"
+
+[artifacts.changelog]
+source = "CHANGELOG.md"
+destination = "Plugin/EasyRec2/CHANGELOG.md"
+
+[artifacts.license]
+source = "LICENSE"
+destination = "Plugin/EasyRec2/LICENSE.txt"
+
+[artifacts.sdk_license]
+source = "third_party/aviutl2_sdk/license.txt"
+destination = "Plugin/EasyRec2/AviUtl2-SDK-LICENSE.txt"
+
+[release]
+output_dir = "dist"
+package_template = "package/package.txt"
+package_id = "EasyRec2"
+package_name = "簡易録音2"
+package_information = "簡易録音2 v{version} - AviUtl ExEdit2用 音声録音プラグイン"
+uninstall_subfolder_file = true
+zip_name = "EasyRec2-v{version}"
+profile = "release"
+include = ["easyrec2_aux2", "readme", "changelog", "license", "sdk_license"]
+
+[catalog]
+id = "Uncre.easyrec2"
+description_path = "./docs/catalog-description.md"
+license_path = "./LICENSE"
+download_repo = { owner = "Uncre", repo = "aviutl2-easyrec2" }
